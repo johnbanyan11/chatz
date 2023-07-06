@@ -20,6 +20,7 @@ function login() {
       user: { displayName: name, email, photoURL: profileImage },
     } = await signInWithPopup(firebaseAuth, provider);
     try {
+      console.log("eeeeeee", name, email);
       if (email) {
         const { data } = await axios.post(CHECK_USER_ROUTE, { email });
         console.log(data);
