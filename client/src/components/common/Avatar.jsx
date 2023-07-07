@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { FcCompactCamera } from "react-icons/fc";
 import ContextMenu from "./ContextMenu";
 import PhotoPicker from "./PhotoPicker";
+import PhotoLibrary from "./PhotoLibrary";
+import CapturePhoto from "./CapturePhoto";
 
 const Avatar = ({ type, image, setImage }) => {
   const [hover, setHover] = useState(false);
@@ -12,6 +14,8 @@ const Avatar = ({ type, image, setImage }) => {
     y: 0,
   });
   const [grabpic, setGrabpic] = useState(false);
+  const [picLibrary, setPicLibrary] = useState(true);
+  const [capture, setCapture] = useState(false);
 
   const openMenu = (e) => {
     e.preventDefault();
@@ -32,8 +36,18 @@ const Avatar = ({ type, image, setImage }) => {
   });
 
   const menuOptions = [
-    { name: "Take Photo", callback: () => {} },
-    { name: "Choose from Library", callback: () => {} },
+    {
+      name: "Take Photo",
+      callback: () => {
+        setCapture(true);
+      },
+    },
+    {
+      name: "Choose from Library",
+      callback: () => {
+        setPicLibrary(true);
+      },
+    },
     {
       name: "Upload Photo",
       callback: () => {
@@ -114,6 +128,10 @@ const Avatar = ({ type, image, setImage }) => {
           menu={ismenuOpen}
           setMenu={setIsMenuOpen}
         />
+      )}
+      {capture && <CapturePhoto setImage={setImage} setCapture={setCapture} />}
+      {picLibrary && (
+        <PhotoLibrary setImage={setImage} hidePhotoLibrary={setPicLibrary} />
       )}
       {grabpic && <PhotoPicker onChange={getPic} />}
     </div>
