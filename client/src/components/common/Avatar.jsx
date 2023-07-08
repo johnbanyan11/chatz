@@ -14,7 +14,7 @@ const Avatar = ({ type, image, setImage }) => {
     y: 0,
   });
   const [grabpic, setGrabpic] = useState(false);
-  const [picLibrary, setPicLibrary] = useState(true);
+  const [picLibrary, setPicLibrary] = useState(false);
   const [capture, setCapture] = useState(false);
 
   const openMenu = (e) => {
