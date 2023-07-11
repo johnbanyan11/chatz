@@ -3,6 +3,8 @@ import { GET_ALL_CONTACTS } from "@/utils/ApiRoutes";
 import { BiArrowBack, BiSearchAlt2 } from "react-icons/bi";
 import { useStateProvider } from "@/context/StateContext";
 import { reducerCases } from "@/context/constants";
+import axios from "axios";
+import ChatLIstItem from "./ChatLIstItem";
 
 function ContactsList() {
   const [allContacts, setAllContacts] = useState([]);
@@ -24,7 +26,7 @@ function ContactsList() {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="h-24 flex items-end px-3 py-3">
+      <div className="h-20 flex items-end px-3 pb-3">
         <div className="flex items-center gap-12 text-white">
           <BiArrowBack
             className="cursor-pointer text-xl"
@@ -54,7 +56,18 @@ function ContactsList() {
         {Object.entries(allContacts).map(([initialLetter, userList]) => {
           return (
             <div key={Date.now() + initialLetter}>
-              <div className="text-teal-light pl-10 py-5">{initialLetter}</div>
+              <div className="text-teal-light pl-5 py-3">
+                {initialLetter}
+                {userList.map((contact) => {
+                  return (
+                    <ChatLIstItem
+                      data={contact}
+                      isContactPage={true}
+                      key={contact?.id}
+                    />
+                  );
+                })}
+              </div>
             </div>
           );
         })}

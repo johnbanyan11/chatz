@@ -33,7 +33,7 @@ const Avatar = ({ type, image, setImage }) => {
         }, 1000);
       };
     }
-  });
+  }, [grabpic]);
 
   const menuOptions = [
     {
