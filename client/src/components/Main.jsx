@@ -64,7 +64,7 @@ function Main() {
       });
       setSocketEvent(true);
     }
-  }, []);
+  }, [socket.current]);
 
   useEffect(() => {
     const getMessages = async () => {
