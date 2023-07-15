@@ -6,7 +6,6 @@ import { reducerCases } from "@/context/constants";
 
 function ChatListHeader() {
   const [{ userInfo }, dispatch] = useStateProvider();
-  console.log("usrrrr", userInfo);
   return (
     <div className="h-16 px-4 py-3 flex justify-between items-center">
       <div className="cursor-pointer">

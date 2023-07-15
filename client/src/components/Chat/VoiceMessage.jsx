@@ -1,8 +1,11 @@
 import { useStateProvider } from "@/context/StateContext";
 import { HOST } from "@/utils/ApiRoutes";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Avatar from "../common/Avatar";
 import { FaPlay, FaStop } from "react-icons/fa";
+import { calculateTime } from "@/utils/CalculateTime";
+import MessageStatus from "../common/MessageStatus";
+import WaveSurfer from "wavesurfer.js";
 
 function VoiceMessage({ message }) {
   const [{ currentChatUser, userInfo }] = useStateProvider();
@@ -10,6 +13,7 @@ function VoiceMessage({ message }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentPlaybackTime, setCurrentPlaybackTime] = useState(0);
   const [totalDuration, setTotalDuration] = useState(0);
+  const [loaded, setLoaded] = useState(false);
 
   const waveFormRef = useRef(null);
   const waveform = useRef(null);
@@ -19,6 +23,7 @@ function VoiceMessage({ message }) {
     if (waveform.current === null) {
       waveform.current = WaveSurfer.create({
         container: waveFormRef.current,
+        backend: "MediaElement",
         waveColor: "#ccc",
         progressColor: "#4a9eff",
         cursorColor: "#7ae3c3",
@@ -29,23 +34,24 @@ function VoiceMessage({ message }) {
 
       waveform.current.on("finish", () => {
         setIsPlaying(false);
+        setLoaded(true);
       });
     }
-
-    return () => {
-      waveform.current.destroy();
-    };
+    // return () => {
+    //   waveform.current.destroy();
+    // };
   }, []);
 
   useEffect(() => {
-    const audioURL = `${HOST}/${message?.message}`;
+    const audioURL = `${HOST}/${message.message}`;
     const audio = new Audio(audioURL);
     setAudioMessage(audio);
-    waveform.current.load(audioURL);
+
     waveform.current.on("ready", () => {
+      waveform.current.load(audioURL);
       setTotalDuration(waveform.current.getDuration());
     });
-  }, [message?.message]);
+  }, [message.message]);
 
   useEffect(() => {
     if (audioMessage) {
@@ -60,16 +66,18 @@ function VoiceMessage({ message }) {
   }, [audioMessage]);
 
   const handlePlay = () => {
+    console.log("audioMessage", audioMessage);
     if (audioMessage) {
-      waveform.current.stop();
-      waveform.current.play();
+      console.log("wavrform", waveform.current);
+      // waveform.current.stop();
+      // waveform.current.play();
       audioMessage.play();
       setIsPlaying(true);
     }
   };
 
   const handlePause = () => {
-    waveform.current.stop();
+    // waveform.current.stop();
     audioMessage.pause();
     setIsPlaying(false);
   };
@@ -86,7 +94,7 @@ function VoiceMessage({ message }) {
   return (
     <div
       className={`flex items-center gap-5 text-white px-4 pr-2 py-4 text-sm rounded-md ${
-        message.senderId === currentChatUser?.id
+        message.senderId === currentChatUser.id
           ? "bg-incoming-background"
           : "bg-outgoing-background"
       }`}
@@ -94,12 +102,26 @@ function VoiceMessage({ message }) {
       <div>
         <Avatar type="lg" image={currentChatUser?.profilePicture} />
       </div>
-      <div>
+      <div className="cursor-pointer text-xl">
         {!isPlaying ? (
           <FaPlay onClick={handlePlay} />
         ) : (
           <FaStop onClick={handlePause} />
         )}
+      </div>
+      <div className="relative">
+        <div className="w-60" ref={waveFormRef}></div>
+        <div className="text-bubble-meta text-[11px] pt-1 flex justify-between absolute bottom-[-22px] w-full">
+          <span>
+            {formatTime(isPlaying ? currentPlaybackTime : totalDuration)}
+          </span>
+          <div className="flex gap-1">
+            <span>{calculateTime(message?.createdAt)}</span>
+            {message?.senderId === userInfo?.id && (
+              <MessageStatus messageStatus={message?.messageStatus} />
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
