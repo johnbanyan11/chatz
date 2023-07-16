@@ -22,7 +22,11 @@ function VoiceCall() {
     }
   }, [voiceCall]);
 
-  return <div>VoiceCall</div>;
+  return (
+    <div>
+      <Container data={voiceCall} />
+    </div>
+  );
 }
 
 export default VoiceCall;
