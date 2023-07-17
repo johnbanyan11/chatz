@@ -1,10 +1,10 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { FcCompactCamera } from "react-icons/fc";
 import ContextMenu from "./ContextMenu";
 import PhotoPicker from "./PhotoPicker";
 import PhotoLibrary from "./PhotoLibrary";
 import CapturePhoto from "./CapturePhoto";
+import { FaCamera } from "react-icons/fa";
 
 const Avatar = ({ type, image, setImage }) => {
   const [hover, setHover] = useState(false);
@@ -72,7 +72,7 @@ const Avatar = ({ type, image, setImage }) => {
     };
     reader.readAsDataURL(file);
     setTimeout(() => {
-      console.log(data.src);
+      // console.log(data.src);
       setImage(data.src);
     }, 100);
   };
@@ -102,7 +102,7 @@ const Avatar = ({ type, image, setImage }) => {
             }`}
             onClick={(e) => openMenu(e)}
           >
-            <FcCompactCamera
+            <FaCamera
               id="context-opener"
               className="text-2xl"
               onClick={(e) => openMenu(e)}

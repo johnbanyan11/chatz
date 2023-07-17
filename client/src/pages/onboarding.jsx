@@ -14,18 +14,18 @@ const onboarding = () => {
   const [name, setName] = useState(userInfo?.name || "");
   const [about, setAbout] = useState(userInfo?.about || "");
   const [image, setImage] = useState("/default_avatar.png");
-  console.log("rrrrrr", userInfo);
+  // console.log("rrrrrr", userInfo);
 
   useEffect(() => {
     if (!newUser && !userInfo?.email) router.push("/login");
     else if (!newUser && userInfo?.email) router.push("/");
-  }, [newUser, userInfo]);
+  }, [newUser, userInfo, router]);
 
   const onBoardUser = async () => {
     if (validateDetails()) {
       const email = userInfo?.email;
       try {
-        console.log("iiiiii");
+        // console.log("iiiiii");
         const { data } = await axios.post(ONBOARD_USER_ROUTE, {
           email,
           name,
@@ -75,7 +75,7 @@ const onboarding = () => {
               className="gap-4 bg-search-input-container-background p-2 rounded-lg"
               onClick={onBoardUser}
             >
-              Create
+              Create Profile
             </button>
           </div>
         </div>

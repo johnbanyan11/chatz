@@ -90,7 +90,7 @@ function MessageBar() {
       formData.append("image", file);
       const response = await axios.post(ADD_IMAGE_MESSAGE_ROUTE, formData, {
         headers: {
-          "Content-type": "multipart/form-data",
+          "Content-Type": "multipart/form-data",
         },
         params: {
           from: userInfo.id,
@@ -146,10 +146,12 @@ function MessageBar() {
               placeholder="Type a Message"
               className="bg-input-background text-sm focus:outline-none text-white h-10 rounded-lg px-5 py-4 w-full"
               onChange={(e) => setMessage(e.target.value)}
+              // onkeydown="if (event.keyCode == 13) document.getElementById('btnSearch').click()"
+              // onKeyDown="if (event.keyCode == 13) {document.getElementById('btnSubmit').click();event.returnValue=false;event.cancel=true;}"
             />
           </div>
           <div className="flex w-10 items-center justify-center">
-            <button onClick={sendMessage}>
+            <button id="btnSearch" onClick={sendMessage}>
               {message.length > 0 ? (
                 <MdSend
                   title="Send Message"

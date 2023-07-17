@@ -15,7 +15,7 @@ function CapturePhoto({ setCapture, setImage }) {
     };
     streamCamera();
     return () => {
-      stream?.getTracks().forEach((track) => track.stop());
+      stream?.getTracks().forEach((track) => track?.stop());
     };
   }, []);
 
@@ -36,7 +36,7 @@ function CapturePhoto({ setCapture, setImage }) {
           <IoClose className="h-5 w-5 cursor-pointer" />
         </div>
         <div className="flex justify-center">
-          <video id="video" width="400" autoPlay ref={videoRef} src=""></video>
+          <video id="video" width="400" autoPlay ref={videoRef}></video>
         </div>
         <button
           className="h-16 w-16 bg-white rounded-full cursor-pointer border-8 border-teal-light p-2"

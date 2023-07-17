@@ -55,7 +55,7 @@ export const getMessages = async (req, res, next) => {
         message.messageStatus !== "read" &&
         message.senderId === parseInt(to)
       ) {
-        console.log("in iffffff");
+        // console.log("in iffffff");
         messages[index].messageStatus = "read";
         unreadMessages.push(message.id);
       }

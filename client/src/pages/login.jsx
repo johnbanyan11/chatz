@@ -10,7 +10,6 @@ import { useRouter } from "next/router";
 
 import React, { useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
-import { BiLogoGmail } from "react-icons/bi";
 
 function login() {
   const router = useRouter();
@@ -18,7 +17,7 @@ function login() {
   const [{ userInfo, newUser }, dispatch] = useStateProvider();
 
   useEffect(() => {
-    if (userInfo?.id && !newUser) router.push("/chat");
+    if (userInfo?.id && !newUser) router.push("/");
   }, [userInfo, newUser]);
 
   const handleGoogleLogin = async () => {
@@ -27,12 +26,12 @@ function login() {
       user: { displayName: name, email, photoURL: profileImage },
     } = await signInWithPopup(firebaseAuth, provider);
     try {
-      console.log("eeeeeee", name, email);
+      // console.log("eeeeeee", name, email);
       if (email) {
         const { data } = await axios.post(CHECK_USER_ROUTE, { email });
-        console.log(data);
+        // console.log(data);
         if (!data?.status) {
-          console.log("false ");
+          // console.log("false ");
           dispatch({ type: reducerCases.SET_NEW_USER, newUser: true });
           dispatch({
             type: reducerCases.SET_USER_INFO,
@@ -45,8 +44,6 @@ function login() {
           });
           router.push("/onboarding");
         } else {
-          console.log("true");
-          console.log(data);
           const {
             id,
             name,
@@ -85,7 +82,7 @@ function login() {
         <FcGoogle className="text-2xl" />
         <span className="text-white text-xl">Login with Google</span>
       </button>
-      <h3>OR </h3>
+      {/* <h3>OR </h3>
 
       <button
         className="flex justify-center items-center gap-4 bg-search-input-container-background px-4 py-3 rounded-lg"
@@ -96,7 +93,7 @@ function login() {
       >
         <BiLogoGmail className="text-red-600" />
         <span className="text-white text-xl">Register with Gmail</span>
-      </button>
+      </button> */}
     </div>
   );
 }

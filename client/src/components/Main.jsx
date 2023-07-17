@@ -65,7 +65,7 @@ function Main() {
   useEffect(() => {
     if (userInfo) {
       socket.current = io(HOST);
-      socket.current.emit("add-user", userInfo.id);
+      socket.current.emit("add-user", userInfo?.id);
       dispatch({ type: reducerCases.SET_SOCKET, socket });
     }
   }, [userInfo]);
@@ -117,19 +117,22 @@ function Main() {
   }, [socket.current]);
 
   useEffect(() => {
-    const getMessages = async () => {
-      try {
-        const {
-          data: { messages },
-        } = await axios.get(
-          `${GET_MESSAGES_ROUTE}/${userInfo?.id}/${currentChatUser?.id}`
-        );
-        dispatch({ type: reducerCases.SET_MESSAGES, messages: messages });
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getMessages();
+    if (userInfo) {
+      const getMessages = async () => {
+        // console.log("tttttt", currentChatUser, userInfo);
+        try {
+          const {
+            data: { messages },
+          } = await axios.get(
+            `${GET_MESSAGES_ROUTE}/${userInfo?.id}/${currentChatUser?.id}`
+          );
+          dispatch({ type: reducerCases.SET_MESSAGES, messages: messages });
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      getMessages();
+    }
   }, [currentChatUser]);
 
   return (

@@ -19,12 +19,12 @@ function SearchBar() {
             placeholder="Search or Start a new chat"
             className="bg-transparent text-sm focus:outline-none text-white w-full"
             value={contactSearch}
-            onChange={(e) =>
+            onChange={(e) => {
               dispatch({
                 type: reducerCases.SET_CONTACT_SEARCH,
                 contactSearch: e.target.value,
-              })
-            }
+              });
+            }}
           />
         </div>
       </div>

@@ -10,7 +10,7 @@ export const initialState = {
   messagesSearch: false,
   userContacts: [],
   onlineUsers: [],
-  contactSearch: "",
+  // contactSearch: "",
   filteredContacts: [],
   videoCall: undefined,
   voiceCall: undefined,
@@ -72,11 +72,9 @@ const reducer = (state, action) => {
         onlineUsers: action.onlineUsers,
       };
     case reducerCases.SET_CONTACT_SEARCH:
-      const filteredContacts = state.userContacts.filter((contact) => {
-        contact?.name
-          .toLowerCase()
-          .includes(action.contactSearch.toLowerCase());
-      });
+      const filteredContacts = state.userContacts.filter((contact) =>
+        contact?.name.toLowerCase().includes(action.contactSearch.toLowerCase())
+      );
       return {
         ...state,
         contactSearch: action.contactSearch,
@@ -110,11 +108,11 @@ const reducer = (state, action) => {
         incomingVideoCall: undefined,
         incomingVoiceCall: undefined,
       };
-      case reducerCases.SET_EXIT_CHAT:
-        return{
-          ...state,
-          currentChatUser:undefined
-        }
+    case reducerCases.SET_EXIT_CHAT:
+      return {
+        ...state,
+        currentChatUser: undefined,
+      };
     default:
       return state;
   }

@@ -14,7 +14,7 @@ function List() {
       try {
         const {
           data: { users, onlineUsers },
-        } = await axios.get(`${GET_INITIAL_CONTACTS_ROUTE}/${userInfo.id}`);
+        } = await axios.get(`${GET_INITIAL_CONTACTS_ROUTE}/${userInfo?.id}`);
         dispatch({ type: reducerCases.SET_ONLINE_USERS, onlineUsers });
         dispatch({ type: reducerCases.SET_USER_CONTACTS, userContacts: users });
       } catch (error) {

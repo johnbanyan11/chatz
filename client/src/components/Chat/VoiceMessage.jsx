@@ -23,7 +23,7 @@ function VoiceMessage({ message }) {
     if (waveform.current === null) {
       waveform.current = WaveSurfer.create({
         container: waveFormRef.current,
-        backend: "MediaElement",
+        // backend: "MediaElement",
         waveColor: "#ccc",
         progressColor: "#4a9eff",
         cursorColor: "#7ae3c3",
@@ -37,9 +37,9 @@ function VoiceMessage({ message }) {
         setLoaded(true);
       });
     }
-    // return () => {
-    //   waveform.current.destroy();
-    // };
+    return () => {
+      waveform.current.destroy();
+    };
   }, []);
 
   useEffect(() => {
@@ -47,14 +47,18 @@ function VoiceMessage({ message }) {
     const audio = new Audio(audioURL);
     setAudioMessage(audio);
 
-    waveform.current.on("ready", () => {
+    if (loaded && waveform.current) {
       waveform.current.load(audioURL);
-      setTotalDuration(waveform.current.getDuration());
-    });
+      waveform.current.on("ready", () => {
+        setTotalDuration(waveform.current.getDuration());
+      });
+      setLoaded(false);
+    }
   }, [message.message]);
 
   useEffect(() => {
     if (audioMessage) {
+      console.log("ssssssss", audioMessage);
       const updatePlaybackTime = () => {
         setCurrentPlaybackTime(audioMessage.currentTime);
       };
@@ -67,17 +71,17 @@ function VoiceMessage({ message }) {
 
   const handlePlay = () => {
     console.log("audioMessage", audioMessage);
-    if (audioMessage) {
+    if (audioMessage && waveform.current) {
       console.log("wavrform", waveform.current);
-      // waveform.current.stop();
-      // waveform.current.play();
+      waveform.current.stop();
+      waveform.current.play();
       audioMessage.play();
       setIsPlaying(true);
     }
   };
 
   const handlePause = () => {
-    // waveform.current.stop();
+    waveform.current.stop();
     audioMessage.pause();
     setIsPlaying(false);
   };
@@ -92,38 +96,40 @@ function VoiceMessage({ message }) {
   };
 
   return (
-    <div
-      className={`flex items-center gap-5 text-white px-4 pr-2 py-4 text-sm rounded-md ${
-        message.senderId === currentChatUser.id
-          ? "bg-incoming-background"
-          : "bg-outgoing-background"
-      }`}
-    >
-      <div>
-        <Avatar type="lg" image={currentChatUser?.profilePicture} />
-      </div>
-      <div className="cursor-pointer text-xl">
-        {!isPlaying ? (
-          <FaPlay onClick={handlePlay} />
-        ) : (
-          <FaStop onClick={handlePause} />
-        )}
-      </div>
-      <div className="relative">
-        <div className="w-60" ref={waveFormRef}></div>
-        <div className="text-bubble-meta text-[11px] pt-1 flex justify-between absolute bottom-[-22px] w-full">
-          <span>
-            {formatTime(isPlaying ? currentPlaybackTime : totalDuration)}
-          </span>
-          <div className="flex gap-1">
-            <span>{calculateTime(message?.createdAt)}</span>
-            {message?.senderId === userInfo?.id && (
-              <MessageStatus messageStatus={message?.messageStatus} />
-            )}
+    <>
+      <div
+        className={`flex items-center gap-5 text-white px-4 pr-2 py-4 text-sm rounded-md ${
+          message.senderId === currentChatUser.id
+            ? "bg-incoming-background"
+            : "bg-outgoing-background"
+        }`}
+      >
+        <div>
+          <Avatar type="lg" image={currentChatUser?.profilePicture} />
+        </div>
+        <div className="cursor-pointer text-xl">
+          {!isPlaying ? (
+            <FaPlay onClick={handlePlay} />
+          ) : (
+            <FaStop onClick={handlePause} />
+          )}
+        </div>
+        <div className="relative">
+          <div className="w-60" ref={waveFormRef}></div>
+          <div className="text-bubble-meta text-[11px] pt-1 flex justify-between absolute bottom-[-22px] w-full">
+            <span>
+              {formatTime(isPlaying ? currentPlaybackTime : totalDuration)}
+            </span>
+            <div className="flex gap-1">
+              <span>{calculateTime(message?.createdAt)}</span>
+              {message?.senderId === userInfo?.id && (
+                <MessageStatus messageStatus={message?.messageStatus} />
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
